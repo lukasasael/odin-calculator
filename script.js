@@ -41,6 +41,7 @@ function generateDivs() {
             pixel.classList.add('pixel');
             pixel.setAttribute("id", "pixel" + counter);
             pixel.textContent = symbols[counter];
+            pixel.style.backgroundColor = "#CDCDCD";
             pixel.addEventListener('click', function handleClick(event) {
                 pixel.style.backgroundColor = "grey";
             });
@@ -49,4 +50,5 @@ function generateDivs() {
         }
     }
 }
+
 generateDivs()
