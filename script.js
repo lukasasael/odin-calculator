@@ -1,12 +1,12 @@
 let num1;
 let num2;
 let operation;
-const symbols = [7, 4, 1, 0, 8, 5, 2, "", 9, 6, 3, "", "÷", "×", "-", "+", "Clear", "", "", "="];
+const symbols = [7, 4, 1, 0, 8, 5, 2, ".", 9, 6, 3, "", "÷", "×", "-", "+", "Clear", "", "", "="];
 
 function operate(num1, num2, operation) {
-    num1 = parseInt(num1);
-    num2 = parseInt(num2);
-    if (!Number.isInteger(num1) || !Number.isInteger(num2))
+    num1 = parseFloat(num1);
+    num2 = parseFloat(num2);
+    if (isNaN(num1) || isNaN(num2))
         return "Invalid Input";
     switch (operation) {
         case '+':
@@ -24,19 +24,19 @@ function operate(num1, num2, operation) {
 
 function addNum(a, b) {
 
-    return (a + b);
+    return Math.round((a + b) * 100) / 100;
 }
 
 function subNum(a, b) {
-    return (a - b);
+    return Math.round((a - b) * 100) / 100;
 }
 
 function multNum(a, b) {
-    return (a * b);
+    return Math.round((a * b) * 100) / 100;
 }
 
 function divNum(a, b) {
-    return (a / b).toFixed(2);
+    return Math.round((a / b) * 100) / 100;
 }
 
 function generateDivs() {
@@ -50,7 +50,7 @@ function generateDivs() {
             pixel.setAttribute("id", "pixel" + counter);
             pixel.textContent = symbols[counter];
             pixel.style.backgroundColor = "#CDCDCD";
-            pixel.addEventListener('click', function handleClick(event) {
+            pixel.addEventListener('click', function handleClick() {
                 display.textContent = `${display.textContent}${pixel.textContent}`;
             });
             calculator.appendChild(pixel);
@@ -60,17 +60,23 @@ function generateDivs() {
     const clear = document.querySelector('#pixel16');
     const equal = document.querySelector('#pixel19');
 
-    clear.addEventListener('click', function handleClick(event) {
+    clear.addEventListener('click', function handleClick() {
         display.textContent = "";
     });
-    equal.addEventListener('click', function handleClick(event) {
-        let displayAll = display.textContent;
-        let displayNumbers = displayAll.split(/[^0-9\.]+/);
-        let displayOperator = displayAll.split("").filter(item => isNaN(item))[0];
+    equal.addEventListener('click', function handleClick() {
+        const breakpoint = (/[\÷\×\+\-\=]+/)
+        let displayNumbers = display.textContent.split(breakpoint);
+        let displayOperator = filterOperator(display.textContent);
         display.textContent = operate(displayNumbers[0], displayNumbers[1], displayOperator);
         console.log(operate(displayNumbers[0], displayNumbers[1], displayOperator));
-        //display.textContent = "";
     });
+}
+
+function filterOperator(array) {
+    for (let i = 0; i < array.length; i++) {
+        if (isNaN(array[i]) && !(array[i] == (".")))
+            return array[i];
+    }
 }
 
 generateDivs()
