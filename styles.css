@@ -37,12 +37,33 @@ btn.pixel {
 
 btn.pixel:hover {
     transform: scale(1.10);
+    cursor: pointer;
+}
+
+#pixel12 {
+    background-color: lightseagreen !important;
+}
+
+#pixel13 {
+    background-color: lightseagreen !important;
+}
+
+#pixel14 {
+    background-color: lightseagreen !important;
+}
+
+#pixel15 {
+    background-color: lightseagreen !important;
 }
 
 #pixel16 {
-    font-weight: 200;
     background-color: lightsalmon !important;
 }
+
+#pixel17 {
+    font-weight: 200;
+    background-color: lightcoral !important;
+}   
 
 #pixel19 {
     background-color: lightskyblue !important;

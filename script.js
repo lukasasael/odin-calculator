@@ -1,25 +1,34 @@
-let num1;
-let num2;
-let operation;
-const symbols = [7, 4, 1, 0, 8, 5, 2, ".", 9, 6, 3, "", "÷", "×", "-", "+", "Clear", "", "", "="];
+const symbols = [7, 4, 1, 0, 8, 5, 2, ".", 9, 6, 3, "", "÷", "×", "-", "+", "Clear", "Del", "", "="];
+const breakpoint = (/[\÷\×\+\-\=]+/)
 
-function operate(num1, num2, operation) {
-    num1 = parseFloat(num1);
-    num2 = parseFloat(num2);
-    if (isNaN(num1) || isNaN(num2))
-        return "Invalid Input";
-    switch (operation) {
-        case '+':
-            return addNum(num1, num2);
-        case '-':
-            return subNum(num1, num2);
-        case '×':
-            return multNum(num1, num2);
-        case '÷':
-            return divNum(num1, num2);
-        default:
+function operate(numbers, operators) {
+    let num1 = parseFloat(numbers[0]);
+    let num2;
+    for (let i = 0; i < operators.length; i++) {
+        if (operators[i] == ("="))
+            return num1;
+        num2 = parseFloat(numbers[i + 1]);
+
+        if (isNaN(num1) || isNaN(num2))
             return "Invalid Input";
+        switch (operators[i]) {
+            case '+':
+                num1 = addNum(num1, num2);
+                break;
+            case '-':
+                num1 = subNum(num1, num2);
+                break;
+            case '×':
+                num1 = multNum(num1, num2);
+                break;
+            case '÷':
+                num1 = divNum(num1, num2);
+                break;
+            default:
+                return "Invalid Input";
+        }
     }
+    return num1;
 }
 
 function addNum(a, b) {
@@ -58,25 +67,34 @@ function generateDivs() {
         }
     }
     const clear = document.querySelector('#pixel16');
+    const del = document.querySelector('#pixel17');
     const equal = document.querySelector('#pixel19');
 
     clear.addEventListener('click', function handleClick() {
         display.textContent = "";
     });
-    equal.addEventListener('click', function handleClick() {
-        const breakpoint = (/[\÷\×\+\-\=]+/)
-        let displayNumbers = display.textContent.split(breakpoint);
-        let displayOperator = filterOperator(display.textContent);
-        display.textContent = operate(displayNumbers[0], displayNumbers[1], displayOperator);
-        console.log(operate(displayNumbers[0], displayNumbers[1], displayOperator));
+    del.addEventListener('click', function handleClick() {
+        let newDisplay = display.textContent.split("");
+        for (let i = 4; i > 0; i--) {
+            newDisplay.pop();
+        }
+        display.textContent = newDisplay.join("");
     });
+    equal.addEventListener('click', function handleClick() {
+        let displayNumbers = display.textContent.split(breakpoint);
+        let displayOperators = filterOperator(display.textContent);
+        display.textContent = operate(displayNumbers, displayOperators);
+    });
+
 }
 
 function filterOperator(array) {
+    let operatorsArray = [];
     for (let i = 0; i < array.length; i++) {
         if (isNaN(array[i]) && !(array[i] == (".")))
-            return array[i];
+            operatorsArray.push(array[i]);
     }
+    return operatorsArray;
 }
 
 generateDivs()
